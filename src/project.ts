@@ -1,6 +1,6 @@
 export const project = {
   name: 'Anomaly Playlists',
-  description: 'Automatic pda music addon creator for you S.T.A.L.K.E.R. Anomaly.',
+  description: 'Automatic pda music addon creator for S.T.A.L.K.E.R. Anomaly.',
   creator: {
     nickname: 'piscopancer',
     name: 'Игорь Быстрицкий',
