@@ -1,3 +1,4 @@
+import { devtools } from 'valtio/utils'
 import { TSong } from './song'
 import { proxy, ref, subscribe, useSnapshot } from 'valtio'
 
@@ -11,3 +12,5 @@ export const store = proxy(defaultStore)
 export function useStoreSnapshot() {
   return useSnapshot(store)
 }
+
+devtools(store)

@@ -6,6 +6,16 @@ const configText = `
   number_of_playlists = 2
 `
 
+export function filterOutSongs(files: File[]) {
+  return files.filter((f) => {
+    const isOgg = f.type === 'audio/ogg'
+    if (!isOgg) console.warn(`File named [${f.name}] must have .ogg format!`)
+    const isUnique = !store.songs.some((s) => s.size === f.size)
+    if (!isUnique) console.warn(`File named [${f.name}] already exists!`)
+    return isOgg && isUnique
+  })
+}
+
 export function formatSongName(name: string) {
   let f = name
   f = f.trim().replaceAll(' ', '_')

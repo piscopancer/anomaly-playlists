@@ -1,6 +1,7 @@
 import { store, useStoreSnapshot } from '@/store'
 import { useRef, useState, useEffect } from 'react'
-import { TbMusicPlus, TbPlaylistAdd } from 'react-icons/tb'
+import { TbMusicPlus } from 'react-icons/tb'
+import { filterOutSongs } from '.'
 
 export default function DropSongsArea() {
   const self = useRef<HTMLInputElement>(null!)
@@ -23,18 +24,13 @@ export default function DropSongsArea() {
       console.log('no files')
       return
     }
-    const files = [...snap.songsBufferInput.files, ...e.target.files]
-    if (files.some((file) => file.type !== 'audio/ogg')) {
-      console.log('ALL FILES MUST BE OGG!')
-      return
-    }
-    Array.from(files).forEach((file) => {
-      dt.items.add(file)
-    })
+    const filteredFiles = filterOutSongs(Array.from(e.target.files))
+    const files = [...snap.songsBufferInput.files, ...filteredFiles]
+    Array.from(files).forEach((f) => dt.items.add(f))
     snap.songsBufferInput.files = dt.files
-    store.songs = files.map((file) => ({
-      name: file.name,
-      size: file.size,
+    store.songs = files.map((f) => ({
+      name: f.name,
+      size: f.size,
     }))
     snap.songsBufferInput.dispatchEvent(new Event('change', { bubbles: true }))
   }

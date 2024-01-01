@@ -4,7 +4,7 @@ import { store, useStoreSnapshot } from '@/store'
 import React, { useEffect, useRef, useState } from 'react'
 import DropSongsArea from './(private)/drop-songs-area'
 import Song from './(private)/song'
-import { downloadPlaylists } from './(private)'
+import { downloadPlaylists, filterOutSongs } from './(private)'
 import anomaly from '@/assets/anomaly.png'
 import background from '@/assets/bg.jpg'
 import Image from 'next/image'
@@ -24,15 +24,10 @@ export default function HomePage() {
     store.songsBufferInput = ref(songsBufferInput.current)
   }, [])
 
-  function onSongsBufferInput(e: React.ChangeEvent<HTMLInputElement>) {}
-
   function onSongsAddInput(e: React.ChangeEvent<HTMLInputElement>) {
     const dt = new DataTransfer()
-    const files = [...songsBufferInput.current.files!, ...e.target.files!]
-    if (files.some((f) => f.type !== 'audio/ogg')) {
-      console.log('ALL FILES MUST BE OGG!')
-      return
-    }
+    const filteredFiles = filterOutSongs(Array.from(e.target.files!))
+    const files = [...songsBufferInput.current.files!, ...filteredFiles]
     Array.from(files).forEach((f) => dt.items.add(f))
     songsBufferInput.current.files = dt.files
     store.songs = files.map((f) => ({
@@ -49,10 +44,10 @@ export default function HomePage() {
 
   return (
     <main className='max-w-screen-lg mx-auto max-lg:mx-4 pt-8 pb-16'>
-      <input ref={songsBufferInput} multiple type='file' onChange={onSongsBufferInput} accept='audio/ogg' className='opacity-0 absolute pointer-events-none' />
+      <input ref={songsBufferInput} multiple type='file' accept='audio/ogg' className='opacity-0 absolute pointer-events-none' />
       <DropSongsArea />
       <section className='fixed inset-0'>
-        <Image alt='background' src={background} className='object-center h-full w-full object-cover' />
+        <Image alt='background' priority src={background} className='object-center h-full w-full object-cover' />
         <div className='absolute inset-0 h-full opacity-80 [background:radial-gradient(transparent,theme(colors.zinc.950))]' />
         <div className='absolute inset-0 h-full bg-gradient-to-b from-transparent via-zinc-950 via-70% to-zinc-950 opacity-80' />
       </section>
@@ -107,8 +102,8 @@ export default function HomePage() {
         </ul>
         {snap.songs.length > 0 ? (
           <ul className='flex flex-col gap-2'>
-            {snap.songs.map((_, i) => (
-              <Song key={i} index={i} song={store.songs[i]} />
+            {snap.songs.map((song, i) => (
+              <Song key={song.size} index={i} song={store.songs[i]} />
             ))}
           </ul>
         ) : (
