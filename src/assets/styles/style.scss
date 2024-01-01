@@ -4,7 +4,7 @@
 @tailwind variants;
 
 input {
-  @apply outline-none;
+  @apply outline-none caret-orange-400;
   &[type="file"] {
     @apply cursor-pointer;
   }
@@ -37,8 +37,8 @@ code {
     @apply bg-zinc-600 rounded-full;
   }
 }
-:focus-visible:not(input, .popover-content, .dropdown-content) {
-  @apply outline outline-0 focus-visible:outline-4 outline-accent duration-100 rounded-[inherit];
+:not(.popover-content, .dropdown-content) {
+  @apply outline outline-0 focus-visible:outline-2 outline-orange-400 focus-visible:duration-100;
 }
 @mixin smoothAppear() {
   animation: smoothAppear 0.2s ease-out forwards;

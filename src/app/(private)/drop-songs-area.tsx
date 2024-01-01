@@ -1,9 +1,10 @@
-import { store } from '@/store'
+import { store, useStoreSnapshot } from '@/store'
 import { useRef, useState, useEffect } from 'react'
 import { TbMusicPlus, TbPlaylistAdd } from 'react-icons/tb'
 
-export default function DropSongsArea(props: { songsBufferInput: HTMLInputElement }) {
+export default function DropSongsArea() {
   const self = useRef<HTMLInputElement>(null!)
+  const snap = useStoreSnapshot()
   const [dragging, setDragging] = useState(false)
 
   useEffect(() => {
@@ -13,15 +14,16 @@ export default function DropSongsArea(props: { songsBufferInput: HTMLInputElemen
   }, [])
 
   function onSongsDrop(e: React.ChangeEvent<HTMLInputElement>) {
+    if (!snap.songsBufferInput) return
     e.preventDefault()
     e.stopPropagation()
     setDragging(false)
     const dt = new DataTransfer()
-    if (!props.songsBufferInput.files || !e.target.files) {
+    if (!snap.songsBufferInput.files || !e.target.files) {
       console.log('no files')
       return
     }
-    const files = [...props.songsBufferInput.files, ...e.target.files]
+    const files = [...snap.songsBufferInput.files, ...e.target.files]
     if (files.some((file) => file.type !== 'audio/ogg')) {
       console.log('ALL FILES MUST BE OGG!')
       return
@@ -29,12 +31,12 @@ export default function DropSongsArea(props: { songsBufferInput: HTMLInputElemen
     Array.from(files).forEach((file) => {
       dt.items.add(file)
     })
-    props.songsBufferInput.files = dt.files
+    snap.songsBufferInput.files = dt.files
     store.songs = files.map((file) => ({
       name: file.name,
       size: file.size,
     }))
-    props.songsBufferInput.dispatchEvent(new Event('change', { bubbles: true }))
+    snap.songsBufferInput.dispatchEvent(new Event('change', { bubbles: true }))
   }
 
   return dragging ? (

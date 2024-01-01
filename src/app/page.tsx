@@ -10,7 +10,7 @@ import background from '@/assets/bg.jpg'
 import Image from 'next/image'
 import { assignObject, classes } from '@/utils'
 import { fonts } from '@/assets/fonts'
-import { TbDownload, TbMusic, TbMusicPlus, TbPlaylist } from 'react-icons/tb'
+import { TbBrandGithub, TbDownload, TbMusic, TbMusicPlus, TbPlaylist } from 'react-icons/tb'
 import { ref } from 'valtio'
 import { project } from '@/project'
 
@@ -50,12 +50,15 @@ export default function HomePage() {
   return (
     <main className='max-w-screen-lg mx-auto max-lg:mx-4 pt-8 pb-16'>
       <input ref={songsBufferInput} multiple type='file' onChange={onSongsBufferInput} accept='audio/ogg' className='opacity-0 absolute pointer-events-none' />
-      <DropSongsArea songsBufferInput={songsBufferInput.current} />
+      <DropSongsArea />
       <section className='fixed inset-0'>
         <Image alt='background' src={background} className='object-center h-full w-full object-cover' />
         <div className='absolute inset-0 h-full opacity-80 [background:radial-gradient(transparent,theme(colors.zinc.950))]' />
         <div className='absolute inset-0 h-full bg-gradient-to-b from-transparent via-zinc-950 via-70% to-zinc-950 opacity-80' />
       </section>
+      <a target='_blank' href={project.links.github} className='h-10 w-10 p-3 rounded-full hover:bg-zinc-800 duration-100 text-zinc-200 fixed right-8 bottom-8'>
+        <TbBrandGithub />
+      </a>
       <section className='relative'>
         <Image alt='anomaly' src={anomaly} className='h-24 w-auto mx-auto' />
         <h1 className='text-center mt-6 text-xl text-zinc-200 font-medium'>{project.name}</h1>
@@ -66,8 +69,20 @@ export default function HomePage() {
           <label htmlFor='addon-name' className='text-zinc-200 flex-1'>
             Name of addon <span className='text-orange-400'>*</span>
           </label>
-          <input id='addon-name' value={addonName} spellCheck={false} onChange={(e) => setAddonName(e.target.value)} placeholder='my-pda-music-addon' type='text' className='flex-1 bg-black/40 text-zinc-200 placeholder-zinc-500 placeholder:italic py-1 px-3 rounded-l-md' />
-          <p className='inline-block rounded-r-md px-2 text-zinc-500 bg-black/20 py-1'>.zip</p>
+          <div className='flex relative'>
+            <input
+              id='addon-name'
+              type='text'
+              value={addonName}
+              spellCheck={false}
+              placeholder='my-pda-music-addon'
+              onChange={(e) => {
+                setAddonName(e.target.value)
+              }}
+              className={classes(fonts.roboto, 'w-[40ch] bg-black/30 text-zinc-200 placeholder-zinc-500 placeholder:italic py-1 pl-[1ch] pr-[7ch] rounded-md')}
+            />
+            <p className={classes(fonts.roboto, 'rounded-r-md px-[1ch] text-zinc-500 bg-black/20 py-1 absolute right-0')}>.zip</p>
+          </div>
         </fieldset>
         <ul className='flex items-center justify-end mb-6'>
           <div className='flex items-center gap-2 mr-8'>
@@ -78,12 +93,16 @@ export default function HomePage() {
             {totalSizeMb} <span className='text-zinc-400'>Mb</span>
           </p>
           <li className='text-zinc-200 bg-zinc-800 rounded-md py-2 px-4 relative hover:bg-zinc-700 duration-100 flex items-center gap-3'>
-            <input title='🎵' multiple type='file' onChange={onSongsAddInput} accept='audio/ogg' className='absolute inset-0 opacity-0' />
+            <input title='' multiple type='file' onChange={onSongsAddInput} accept='audio/ogg' className='absolute inset-0 opacity-0' />
             <TbMusicPlus />
             Import songs
           </li>
-          <button onClick={onDownloadClick} disabled={snap.songs.length === 0 || !addonName} className='text-zinc-200 ml-4 rounded-md h-10 enabled:bg-gradient-to-t disabled:!bg-black/20 disabled:text-zinc-600 enabled:from-orange-500 enabled:to-orange-400/20 hover:scale-110 duration-100 p-2.5'>
-            <TbDownload className='h-full' />
+          <button
+            onClick={onDownloadClick}
+            disabled={snap.songs.length === 0 || !addonName}
+            className='text-zinc-900 ml-4 rounded-md h-10 disabled:!bg-black/20 disabled:text-zinc-600 enabled:bg-orange-400 hover:enabled:brightness-125 enabled:shadow-xl enabled:shadow-orange-400/30 group p-2.5 duration-200'
+          >
+            <TbDownload className='h-full group-hover:scale-110 duration-200 ease-out' />
           </button>
         </ul>
         {snap.songs.length > 0 ? (
@@ -95,7 +114,7 @@ export default function HomePage() {
         ) : (
           <div className='py-24 bg-black/20 rounded-md'>
             <TbMusic className='text-zinc-500 h-6 mb-2 mx-auto' />
-            <p className='text-zinc-500 text-center'>Песни появятся здесь</p>
+            <p className='text-zinc-500 text-center'>Songs will populate this area</p>
           </div>
         )}
       </section>
