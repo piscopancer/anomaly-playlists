@@ -56,7 +56,9 @@ export default function HomePage() {
       </a>
       <section className='relative'>
         <Image alt='anomaly' src={anomaly} className='h-24 w-auto mx-auto' />
-        <h1 className='text-center mt-6 text-xl text-zinc-200 font-medium'>{project.name}</h1>
+        <h1 className='text-center mt-6 text-xl text-zinc-200 font-medium'>
+          {project.name} <span className='text-zinc-400'>(beta)</span>
+        </h1>
         <h2 className='text-center text-zinc-400 text-sm mb-6'>
           Upload your <code className={classes(fonts.roboto, 'bg-black/20 text-orange-400 px-1 rounded-md')}>.ogg</code> tracks to create a PDA music addon
         </h2>
