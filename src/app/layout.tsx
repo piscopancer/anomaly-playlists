@@ -1,12 +1,12 @@
-import { projectInfo } from '@/project'
+import { project } from '@/project'
 import type { Metadata } from 'next'
 import '@/assets/styles/style.scss'
 import { classes } from '@/utils'
 import { fonts } from '@/assets/fonts'
 
 export const metadata: Metadata = {
-  title: projectInfo.name,
-  description: projectInfo.description,
+  title: project.name,
+  description: project.description,
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

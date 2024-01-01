@@ -1,10 +1,12 @@
-import { useProxy } from 'valtio/utils'
 import { TSong } from './song'
-import { proxy, useSnapshot } from 'valtio'
+import { proxy, ref, subscribe, useSnapshot } from 'valtio'
 
-export const store = proxy<{ songs: TSong[] }>({
-  songs: [],
-})
+const defaultStore = {
+  songsBufferInput: null as ReturnType<typeof ref<HTMLInputElement>> | null,
+  songs: [] as TSong[],
+}
+
+export const store = proxy(defaultStore)
 
 export function useStoreSnapshot() {
   return useSnapshot(store)

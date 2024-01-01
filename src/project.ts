@@ -1,4 +1,4 @@
-export const projectInfo = {
+export const project = {
   name: 'Anomaly Playlists',
   description: 'Automatic pda music addon creator for you S.T.A.L.K.E.R. Anomaly.',
   creator: {
@@ -12,6 +12,9 @@ export const projectInfo = {
       telegram: 'https://t.me/piscopancer',
       whatsapp: 'https://wa.me/89284379219',
     },
+  },
+  links: {
+    github: 'https://github.com/piscopancer/anomaly-playlists',
   },
   url: 'https://anomalyplaylists.vercel.app',
   keywords: ['stalker', 'anomaly', 'stalker-anomaly', 'music', 'addon'],
