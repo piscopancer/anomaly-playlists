@@ -3,21 +3,24 @@
 import { store, useStoreSnapshot } from '@/store'
 import React, { useEffect, useRef, useState } from 'react'
 import DropSongsArea from './(private)/drop-songs-area'
-import Song from './(private)/song'
+import { Song } from './(private)/song'
 import { downloadPlaylists, filterOutSongs } from './(private)'
 import anomaly from '@/assets/anomaly.png'
 import background from '@/assets/bg.jpg'
 import Image from 'next/image'
 import { assignObject, classes } from '@/utils'
 import { fonts } from '@/assets/fonts'
-import { TbBrandGithub, TbDownload, TbMusic, TbMusicPlus, TbPlaylist } from 'react-icons/tb'
+import { TbBrandGithub, TbDownload, TbDragDrop, TbMusic, TbMusicPlus, TbPlaylist } from 'react-icons/tb'
 import { ref } from 'valtio'
 import { project } from '@/project'
+import { AnimatePresence, motion } from 'framer-motion'
+import { Tooltip } from '@/components/tooltip'
 
 export default function HomePage() {
   const snap = useStoreSnapshot()
   const totalSizeMb = (snap.songs.map((s) => s.size).reduce((prev, next) => prev + next, 0) / 1024 ** 2).toFixed(1)
   const songsBufferInput = useRef<HTMLInputElement>(null!)
+  const addonNameInput = useRef<HTMLInputElement>(null!)
   const [addonName, setAddonName] = useState('')
 
   useEffect(() => {
@@ -51,12 +54,20 @@ export default function HomePage() {
         <div className='absolute inset-0 h-full opacity-80 [background:radial-gradient(transparent,theme(colors.zinc.950))]' />
         <div className='absolute inset-0 h-full bg-gradient-to-b from-transparent via-zinc-950 via-70% to-zinc-950 opacity-80' />
       </section>
-      <a target='_blank' href={project.links.github} className='h-10 w-10 p-3 rounded-full hover:bg-zinc-800 duration-100 text-zinc-200 fixed right-8 bottom-8'>
-        <TbBrandGithub />
-      </a>
+      <Tooltip
+        content={
+          <>
+            Support this project on <span className='text-orange-400'>Github</span>
+          </>
+        }
+      >
+        <a target='_blank' href={project.links.github} className='h-10 w-10 p-3 rounded-full hover:bg-zinc-800 duration-100 text-zinc-200 fixed right-8 bottom-8'>
+          <TbBrandGithub />
+        </a>
+      </Tooltip>
       <section className='relative'>
-        <Image alt='anomaly' src={anomaly} className='h-24 w-auto mx-auto' />
-        <h1 className='text-center mt-6 text-xl text-zinc-200 font-medium'>
+        <Image alt='anomaly' src={anomaly} className='h-24 w-auto mx-auto mb-6' />
+        <h1 className='text-center mb-1 text-xl text-zinc-200 font-light'>
           {project.name} <span className='text-zinc-400'>(beta)</span>
         </h1>
         <h2 className='text-center text-zinc-400 text-sm mb-6'>
@@ -70,6 +81,8 @@ export default function HomePage() {
             <input
               id='addon-name'
               type='text'
+              autoComplete='none'
+              ref={addonNameInput}
               value={addonName}
               spellCheck={false}
               placeholder='my-pda-music-addon'
@@ -94,25 +107,54 @@ export default function HomePage() {
             <TbMusicPlus />
             Import songs
           </li>
-          <button
-            onClick={onDownloadClick}
-            disabled={snap.songs.length === 0 || !addonName}
-            className='text-zinc-900 ml-4 rounded-md h-10 disabled:!bg-black/20 disabled:text-zinc-600 enabled:bg-orange-400 hover:enabled:brightness-125 enabled:shadow-xl enabled:shadow-orange-400/30 group p-2.5 duration-200'
+          <Tooltip
+            hidden={!!addonName && !!snap.songs.length}
+            content={
+              <ul className='list-disc list-inside marker:text-zinc-600'>
+                <li hidden={!!addonName}>
+                  Give yor addon a <span className='text-orange-400'>name</span> first
+                </li>
+                <li hidden={!!snap.songs.length}>
+                  Add at least <span className='text-orange-400'>1</span> song
+                </li>
+              </ul>
+            }
           >
-            <TbDownload className='h-full group-hover:scale-110 duration-200 ease-out' />
-          </button>
+            <button
+              onMouseOver={() => {
+                if (!addonName) addonNameInput.current.focus()
+              }}
+              onClick={onDownloadClick}
+              disabled={snap.songs.length === 0 || !addonName}
+              className='text-zinc-900 ml-4 rounded-md h-10 disabled:!bg-black/20 disabled:text-zinc-600 enabled:bg-orange-400 hover:enabled:brightness-125 enabled:shadow-xl enabled:shadow-orange-400/30 group p-2.5 duration-200'
+            >
+              <TbDownload className='h-full group-hover:scale-110 duration-200 ease-out' />
+            </button>
+          </Tooltip>
         </ul>
         {snap.songs.length > 0 ? (
           <ul className='flex flex-col gap-2'>
-            {snap.songs.map((song, i) => (
-              <Song key={song.size} index={i} song={store.songs[i]} />
-            ))}
+            <AnimatePresence mode='popLayout'>
+              {snap.songs.map((song, i) => (
+                <Song key={song.size} index={i} song={store.songs[i]} />
+              ))}
+            </AnimatePresence>
           </ul>
         ) : (
-          <div className='py-24 bg-black/20 rounded-md'>
-            <TbMusic className='text-zinc-500 h-6 mb-2 mx-auto' />
-            <p className='text-zinc-500 text-center'>Songs will populate this area</p>
-          </div>
+          <motion.div initial={{ opacity: 0, translateY: 5 }} animate={{ opacity: 1, translateY: 0 }} className='py-12 bg-black/20 rounded-md'>
+            <p className='text-zinc-400 text-center'>
+              <TbMusic className='inline-block -translate-y-0.5' /> Songs will appear here
+            </p>
+            <div className='w-2 h-2 rounded-full bg-zinc-700 mx-auto my-4' />
+            <div className='text-center text-zinc-400'>
+              You can{' '}
+              <div className='text-zinc-200 inline-block'>
+                <TbDragDrop className='inline-block mr-1 -translate-y-0.5' />
+                drag & drop
+              </div>{' '}
+              files onto the page btw ngl
+            </div>
+          </motion.div>
         )}
       </section>
     </main>

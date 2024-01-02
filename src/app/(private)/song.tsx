@@ -2,10 +2,11 @@ import { TSong } from '@/song'
 import { store } from '@/store'
 import { useSnapshot } from 'valtio'
 import { formatSongName } from '.'
-import { TbRestore, TbRotate, TbX } from 'react-icons/tb'
-import { useRef } from 'react'
+import { TbRotate, TbX } from 'react-icons/tb'
+import { forwardRef, useRef } from 'react'
+import { motion } from 'framer-motion'
 
-export default function Song(props: { index: number; song: TSong }) {
+export const Song = forwardRef<HTMLDivElement, { index: number; song: TSong }>((props, ref) => {
   const songSnap = useSnapshot(props.song)
   const nameInput = useRef<HTMLInputElement>(null!)
 
@@ -30,7 +31,17 @@ export default function Song(props: { index: number; song: TSong }) {
   }
 
   return (
-    <article className='p-2 flex gap-2 rounded-md bg-gradient-to-r from-zinc-800/20 to-zinc-800/50'>
+    <motion.article
+      ref={ref}
+      layout={'position'}
+      initial={{
+        translateY: -5,
+        opacity: 0,
+      }}
+      animate={{ translateY: 0, opacity: 1 }}
+      exit={{ translateY: -5, opacity: 0 }}
+      className='p-2 flex gap-2 rounded-md bg-gradient-to-r from-zinc-800/20 to-zinc-800/50'
+    >
       <p className='text-zinc-400 text-xs h-5 w-5 rounded-full flex justify-center items-center bg-zinc-800 self-start shrink-0'>{props.index + 1}</p>
       <div className='grid grid-cols-[1fr_auto_auto] grid-rows-2 gap-x-4 items-center w-full'>
         <div className='flex items-center gap-2'>
@@ -50,6 +61,6 @@ export default function Song(props: { index: number; song: TSong }) {
           <TbX />
         </button>
       </div>
-    </article>
+    </motion.article>
   )
-}
+})

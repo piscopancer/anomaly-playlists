@@ -16,7 +16,7 @@ html {
   scroll-behavior: smooth !important;
 }
 svg {
-  @apply w-auto h-auto aspect-square;
+  @apply w-auto h-auto aspect-square shrink-0;
 }
 h1,
 h2,
@@ -40,49 +40,31 @@ code {
 :not(.popover-content, .dropdown-content) {
   @apply outline outline-0 focus-visible:outline-2 outline-orange-400 focus-visible:duration-100;
 }
-@mixin smoothAppear() {
-  animation: smoothAppear 0.2s ease-out forwards;
-  @keyframes smoothAppear {
-    from {
-      opacity: 0;
-      translate: 0;
-    }
-    to {
-      opacity: 1;
-      translate: 0 -0.25rem;
-    }
-  }
-}
-.tooltip-content {
-  @apply z-[2] py-1 px-3 rounded-lg bg-zinc-900 text-white text-sm border-2 border-zinc-800;
-  @include smoothAppear();
-}
-.dialog-content {
-  @apply fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-8 py-6 max-md:px-4 max-md:py-3 rounded-2xl shadow-zinc-300/20 max-w-[calc(100%-1rem)] max-h-screen z-[2];
-  @include smoothAppear();
-}
-.overlay {
-  @apply fixed inset-0 bg-black/25 z-[1];
-  animation: fadeIn 0.1s ease-out forwards;
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-}
 [data-radix-popper-content-wrapper] > * {
-  @include smoothAppear();
-}
-.popover-content,
-.dropdown-content {
-  @apply bg-white p-2 rounded-2xl shadow-lg shadow-zinc-300/20 z-[2] border;
-  @include smoothAppear();
-
-  & > span > svg {
-    @apply stroke-1 stroke-zinc-300;
+  &[data-side="top"] {
+    animation: smoothAppearTop 0.2s ease-out forwards;
+    @keyframes smoothAppearTop {
+      from {
+        opacity: 0;
+        translate: 0;
+      }
+      to {
+        opacity: 1;
+        translate: 0 -0.25rem;
+      }
+    }
+  }
+  &[data-side="bottom"] {
+    animation: smoothAppearBottom 0.2s ease-out forwards;
+    @keyframes smoothAppearBottom {
+      from {
+        opacity: 0;
+        translate: 0 -0.25rem;
+      }
+      to {
+        opacity: 1;
+        translate: 0rem;
+      }
+    }
   }
 }
