@@ -64,3 +64,5 @@ export const Song = forwardRef<HTMLDivElement, { index: number; song: TSong }>((
     </motion.article>
   )
 })
+
+Song.displayName = 'Song'
