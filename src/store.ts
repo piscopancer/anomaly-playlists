@@ -1,6 +1,6 @@
 import { devtools } from 'valtio/utils'
 import { TSong } from './song'
-import { proxy, ref, subscribe, useSnapshot } from 'valtio'
+import { proxy, ref, useSnapshot } from 'valtio'
 
 const defaultStore = {
   songsBufferInput: null as ReturnType<typeof ref<HTMLInputElement>> | null,

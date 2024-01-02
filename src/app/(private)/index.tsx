@@ -1,5 +1,9 @@
+import { fonts } from '@/assets/fonts'
+import { showToast } from '@/components/toast'
 import { store } from '@/store'
+import { classes } from '@/utils'
 import { downloadZip } from 'client-zip'
+import { ref } from 'valtio'
 
 const configText = `
 [trx_radio_plyr]
@@ -9,7 +13,18 @@ const configText = `
 export function filterOutSongs(files: File[]) {
   return files.filter((f) => {
     const isOgg = f.type === 'audio/ogg'
-    if (!isOgg) console.warn(`File named [${f.name}] must have .ogg format!`)
+    if (!isOgg) {
+      showToast({
+        title: 'File error',
+        description: ref(() => (
+          <>
+            File <span className='text-white'>{f.name.length > 20 ? `${f.name.slice(0, 28)}...` : f.name}</span> must have <code className={classes(fonts.roboto, 'text-orange-400')}>.ogg</code> format!
+          </>
+        )),
+        type: 'warning',
+      })
+      console.warn(`File named [${f.name}] must have .ogg format!`)
+    }
     const isUnique = !store.songs.some((s) => s.size === f.size)
     if (!isUnique) console.warn(`File named [${f.name}] already exists!`)
     return isOgg && isUnique

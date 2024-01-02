@@ -61,7 +61,7 @@ export default function HomePage() {
           </>
         }
       >
-        <a target='_blank' href={project.links.github} className='h-10 w-10 p-3 rounded-full hover:bg-zinc-800 duration-100 text-zinc-200 fixed right-8 bottom-8'>
+        <a target='_blank' href={project.links.github} className='h-10 w-10 p-3 rounded-full hover:bg-zinc-800 duration-100 text-zinc-200 fixed right-8 top-8'>
           <TbBrandGithub />
         </a>
       </Tooltip>
@@ -145,7 +145,7 @@ export default function HomePage() {
             <p className='text-zinc-400 text-center'>
               <TbMusic className='inline-block -translate-y-0.5' /> Songs will appear here
             </p>
-            <div className='w-2 h-2 rounded-full bg-zinc-700 mx-auto my-4' />
+            <div className='w-40 h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent mx-auto my-4' />
             <div className='text-center text-zinc-400'>
               You can{' '}
               <div className='text-zinc-200 inline-block'>
