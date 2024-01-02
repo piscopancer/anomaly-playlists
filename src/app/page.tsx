@@ -85,11 +85,11 @@ export default function HomePage() {
               ref={addonNameInput}
               value={addonName}
               spellCheck={false}
-              placeholder='my-pda-music-addon'
+              placeholder='my-songs-addon'
               onChange={(e) => {
                 setAddonName(e.target.value)
               }}
-              className={classes(fonts.roboto, 'w-[40ch] bg-black/30 text-zinc-200 placeholder-zinc-500 placeholder:italic py-1 pl-[1ch] pr-[7ch] rounded-md')}
+              className={classes(fonts.roboto, 'w-[40ch] bg-black/30 text-zinc-200 placeholder:text-zinc-500 py-1 pl-[1ch] pr-[7ch] rounded-md hover:placeholder:text-zinc-700 focus:placeholder:text-zinc-700')}
             />
             <p className={classes(fonts.roboto, 'rounded-r-md px-[1ch] text-zinc-500 bg-black/20 py-1 absolute right-0')}>.zip</p>
           </div>
