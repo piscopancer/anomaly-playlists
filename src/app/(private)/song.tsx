@@ -39,10 +39,11 @@ export const Song = forwardRef<HTMLDivElement, { index: number; song: TSong }>((
         opacity: 0,
       }}
       animate={{ translateY: 0, opacity: 1 }}
-      exit={{ translateY: -5, opacity: 0 }}
+      exit={{ translateY: -5, opacity: 0, transition: { duration: 0.1 } }}
+      transition={{ layout: { duration: 0.1 } }}
       className='p-2 flex gap-2 rounded-md bg-gradient-to-r from-zinc-800/20 to-zinc-800/50'
     >
-      <p className='text-zinc-400 text-xs h-5 w-5 rounded-full flex justify-center items-center bg-zinc-800 self-start shrink-0'>{props.index + 1}</p>
+      <p className='text-zinc-400 mt-0.5 text-xs h-5 w-5 rounded-full flex justify-center items-center bg-zinc-800 self-start shrink-0'>{props.index + 1}</p>
       <div className='grid grid-cols-[1fr_auto_auto] grid-rows-2 gap-x-4 items-center w-full'>
         <div className='flex items-center gap-2'>
           <input type='text' ref={nameInput} defaultValue={songSnap.name} onChange={changeName} className='text-sm text-zinc-200 rounded-md bg-transparent grow py-0.5' />

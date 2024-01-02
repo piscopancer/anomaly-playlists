@@ -102,7 +102,9 @@ export default function HomePage() {
           <p className='text-zinc-200 text-sm mr-8'>
             {totalSizeMb} <span className='text-zinc-400'>Mb</span>
           </p>
-          <li className='text-zinc-200 bg-zinc-800 rounded-md py-2 px-4 relative hover:bg-zinc-700 duration-100 flex items-center gap-3'>
+          <li className='text-zinc-200 bg-zinc-800 rounded-md py-2 px-4 relative flex items-center gap-3 group border-2 border-transparent hover:border-zinc-700 duration-200 ease-out'>
+            <div className='absolute top-[-2px] inset-x-2 h-[2px] bg-gradient-to-r from-transparent via-zinc-700 to-transparent' />
+            <div className='absolute bottom-[-2px] inset-x-2 h-[2px] bg-gradient-to-r from-transparent via-zinc-700 to-transparent' />
             <input title='' multiple type='file' onChange={onSongsAddInput} accept='audio/ogg' className='absolute inset-0 opacity-0' />
             <TbMusicPlus />
             Import songs
@@ -145,15 +147,15 @@ export default function HomePage() {
             <p className='text-zinc-400 text-center'>
               <TbMusic className='inline-block -translate-y-0.5' /> Songs will appear here
             </p>
-            <div className='w-40 h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent mx-auto my-4' />
-            <div className='text-center text-zinc-400'>
+            <div className='w-56 h-[2px] bg-gradient-to-r from-transparent via-zinc-700 to-transparent mx-auto my-4' />
+            <p className='text-center text-zinc-400'>
               You can{' '}
-              <div className='text-zinc-200 inline-block'>
+              <span className='text-zinc-200 inline-block'>
                 <TbDragDrop className='inline-block mr-1 -translate-y-0.5' />
                 drag & drop
-              </div>{' '}
+              </span>{' '}
               files onto the page btw ngl
-            </div>
+            </p>
           </motion.div>
         )}
       </section>

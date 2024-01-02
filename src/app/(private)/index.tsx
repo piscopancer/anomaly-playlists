@@ -15,7 +15,7 @@ export function filterOutSongs(files: File[]) {
     const isOgg = f.type === 'audio/ogg'
     if (!isOgg) {
       showToast({
-        title: 'File error',
+        title: 'File format error',
         description: ref(() => (
           <>
             File <span className='text-white'>{f.name.length > 20 ? `${f.name.slice(0, 28)}...` : f.name}</span> must have <code className={classes(fonts.roboto, 'text-orange-400')}>.ogg</code> format!
@@ -23,10 +23,21 @@ export function filterOutSongs(files: File[]) {
         )),
         type: 'warning',
       })
-      console.warn(`File named [${f.name}] must have .ogg format!`)
+      console.warn(`File [${f.name}] must have .ogg format!`)
     }
     const isUnique = !store.songs.some((s) => s.size === f.size)
-    if (!isUnique) console.warn(`File named [${f.name}] already exists!`)
+    if (!isUnique) {
+      showToast({
+        title: 'Duplicate file',
+        description: ref(() => (
+          <>
+            File <span className='text-white'>{f.name.length > 20 ? `${f.name.slice(0, 28)}...` : f.name}</span> already in the list!
+          </>
+        )),
+        type: 'warning',
+      })
+      console.warn(`File [${f.name}] already in the list!`)
+    }
     return isOgg && isUnique
   })
 }
@@ -57,4 +68,10 @@ export async function downloadPlaylists(addonName: string, _songs: File[]) {
   link.download = `${addonName}.zip`
   link.click()
   link.remove()
+
+  showToast({
+    title: 'Downloading...',
+    description: ref(() => <>Your addon is gonna be downloaded soon. Have a great day in the Zone, Stalker 🤟</>),
+    type: 'success',
+  })
 }
