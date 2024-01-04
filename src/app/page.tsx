@@ -73,11 +73,11 @@ export default function HomePage() {
         <h2 className='text-center text-zinc-400 text-sm mb-6'>
           Upload your <code className={classes(fonts.roboto, 'bg-black/20 text-orange-400 px-1 rounded-md')}>.ogg</code> tracks to create a PDA music addon
         </h2>
-        <fieldset className='flex mb-6 items-center'>
-          <label htmlFor='addon-name' className='text-zinc-200 flex-1'>
+        <fieldset className='flex mb-6 items-center max-md:block'>
+          <label htmlFor='addon-name' className='text-zinc-200 block max-md:mb-1 max-md:text-sm'>
             Name of addon <span className='text-orange-400'>*</span>
           </label>
-          <div className='flex relative'>
+          <div className='flex relative w-[40ch] max-md:w-auto ml-auto'>
             <input
               id='addon-name'
               type='text'
@@ -89,7 +89,7 @@ export default function HomePage() {
               onChange={(e) => {
                 setAddonName(e.target.value)
               }}
-              className={classes(fonts.roboto, 'w-[40ch] bg-black/30 text-zinc-200 placeholder:text-zinc-500 py-1 pl-[1ch] pr-[7ch] rounded-md hover:placeholder:text-zinc-700 focus:placeholder:text-zinc-700')}
+              className={classes(fonts.roboto, 'grow bg-black/30 text-zinc-200 placeholder:text-zinc-500 py-1 pl-[1ch] pr-[7ch] rounded-md hover:placeholder:text-zinc-700 focus:placeholder:text-zinc-700')}
             />
             <p className={classes(fonts.roboto, 'rounded-r-md px-[1ch] text-zinc-500 bg-black/20 py-1 absolute right-0')}>.zip</p>
           </div>
