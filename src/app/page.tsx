@@ -4,50 +4,51 @@ import { store, useStoreSnapshot } from '@/store'
 import React, { useEffect, useRef, useState } from 'react'
 import DropSongsArea from './(private)/drop-songs-area'
 import { Song } from './(private)/song'
-import { downloadPlaylists, filterOutSongs } from './(private)'
+import { downloadPlaylists, filterOutSongs, getallowedExtensions } from './(private)'
 import anomaly from '@/assets/anomaly.png'
 import background from '@/assets/bg.jpg'
 import Image from 'next/image'
-import { assignObject, classes } from '@/utils'
+import { classes } from '@/utils'
 import { fonts } from '@/assets/fonts'
 import { TbBrandGithub, TbDownload, TbDragDrop, TbMusic, TbMusicPlus, TbPlaylist } from 'react-icons/tb'
 import { ref } from 'valtio'
 import { project } from '@/project'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Tooltip } from '@/components/tooltip'
+import { loadFfmpeg } from '@/ffmpeg'
+import SongsBuffer from './(private)/songs-buffer'
+import { getSongsAsFiles } from '@/song'
 
 export default function HomePage() {
   const snap = useStoreSnapshot()
   const totalSizeMb = (snap.songs.map((s) => s.size).reduce((prev, next) => prev + next, 0) / 1024 ** 2).toFixed(1)
-  const songsBufferInput = useRef<HTMLInputElement>(null!)
   const addonNameInput = useRef<HTMLInputElement>(null!)
   const [addonName, setAddonName] = useState('')
 
   useEffect(() => {
-    store.songsBufferInput = ref(songsBufferInput.current)
+    loadFfmpeg()
   }, [])
 
   function onSongsAddInput(e: React.ChangeEvent<HTMLInputElement>) {
-    const dt = new DataTransfer()
-    const filteredFiles = filterOutSongs(Array.from(e.target.files!))
-    const files = [...songsBufferInput.current.files!, ...filteredFiles]
-    Array.from(files).forEach((f) => dt.items.add(f))
-    songsBufferInput.current.files = dt.files
-    store.songs = files.map((f) => ({
+    const newSongs = filterOutSongs(Array.from(e.target.files!))
+    e.target.files = new DataTransfer().files
+    const allSongs = [...getSongsAsFiles(), ...newSongs]
+    const allSongsBuffer = new DataTransfer()
+    allSongs.forEach((f) => allSongsBuffer.items.add(f))
+    store.songsBufferInput.files = allSongsBuffer.files
+    store.songs = allSongs.map((f) => ({
       name: f.name,
       size: f.size,
     }))
-    songsBufferInput.current.dispatchEvent(new Event('change', { bubbles: true }))
   }
 
   function onDownloadClick() {
-    console.log(Array.from(songsBufferInput.current.files!))
-    downloadPlaylists(addonName, Array.from(songsBufferInput.current.files!))
+    downloadPlaylists(addonName, getSongsAsFiles())
   }
 
   return (
     <main className='max-w-screen-lg mx-auto max-lg:mx-4 pt-8 pb-16'>
-      <input ref={songsBufferInput} multiple type='file' accept='audio/ogg' className='opacity-0 absolute pointer-events-none' />
+      <SongsBuffer />
       <DropSongsArea />
       <section className='fixed inset-0'>
         <Image alt='background' priority src={background} className='object-center h-full w-full object-cover' />
@@ -61,7 +62,7 @@ export default function HomePage() {
           </>
         }
       >
-        <a target='_blank' href={project.links.github} className='h-10 w-10 p-3 rounded-full hover:bg-zinc-800 duration-100 text-zinc-200 fixed right-8 top-8'>
+        <a target='_blank' href={project.links.github} className='h-10 w-10 p-3 rounded-full hover:bg-zinc-800 duration-100 text-zinc-200 fixed right-8 top-8 z-[1] max-md:hidden'>
           <TbBrandGithub />
         </a>
       </Tooltip>
@@ -71,7 +72,7 @@ export default function HomePage() {
           {project.name} <span className='text-zinc-400'>(beta)</span>
         </h1>
         <h2 className='text-center text-zinc-400 text-sm mb-6'>
-          Upload your <code className={classes(fonts.roboto, 'bg-black/20 text-orange-400 px-1 rounded-md')}>.ogg</code> tracks to create a PDA music addon
+          Upload your <code className={classes(fonts.roboto, 'text-orange-400')}>{getallowedExtensions().join('/')}</code> tracks to create a PDA music addon
         </h2>
         <fieldset className='flex mb-6 items-center max-md:block'>
           <label htmlFor='addon-name' className='text-zinc-200 block max-md:mb-1 max-md:text-sm'>

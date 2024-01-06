@@ -9,18 +9,27 @@ const configText = `
 [trx_radio_plyr]
   number_of_playlists = 2
 `
+const maxFileLength = 24
+const acceptedFormats = ['audio/ogg', 'audio/mpeg'] as const
+export type TAcceptedFormat = (typeof acceptedFormats)[number]
+
+export function getallowedExtensions() {
+  return acceptedFormats.map((f) => f.replace('audio/', ''))
+}
 
 export function filterOutSongs(files: File[]) {
   return files.filter((f) => {
-    const isOgg = f.type === 'audio/ogg'
-    if (!isOgg) {
+    const isAcceptedFormat = (acceptedFormats as readonly string[]).includes(f.type)
+    console.log(f.type)
+    if (!isAcceptedFormat) {
       showToast({
-        title: 'File format error',
-        description: ref(() => (
+        id: crypto.randomUUID(),
+        title: 'Wrong file format',
+        description: (
           <>
-            File <span className='text-white'>{f.name.length > 20 ? `${f.name.slice(0, 28)}...` : f.name}</span> must have <code className={classes(fonts.roboto, 'text-orange-400')}>.ogg</code> format!
+            File <span className='text-white'>{f.name.length > maxFileLength ? `${f.name.slice(0, maxFileLength)}...` : f.name}</span> must have <code className={classes(fonts.roboto, 'text-orange-400')}>{getallowedExtensions().join('/')}</code> format!
           </>
-        )),
+        ),
         type: 'warning',
       })
       console.warn(`File [${f.name}] must have .ogg format!`)
@@ -28,17 +37,18 @@ export function filterOutSongs(files: File[]) {
     const isUnique = !store.songs.some((s) => s.size === f.size)
     if (!isUnique) {
       showToast({
+        id: crypto.randomUUID(),
         title: 'Duplicate file',
-        description: ref(() => (
+        description: (
           <>
-            File <span className='text-white'>{f.name.length > 20 ? `${f.name.slice(0, 28)}...` : f.name}</span> already in the list!
+            File <span className='text-white'>{f.name.length > maxFileLength ? `${f.name.slice(0, maxFileLength)}...` : f.name}</span> already in the list!
           </>
-        )),
+        ),
         type: 'warning',
       })
       console.warn(`File [${f.name}] already in the list!`)
     }
-    return isOgg && isUnique
+    return isAcceptedFormat && isUnique
   })
 }
 
@@ -70,8 +80,9 @@ export async function downloadPlaylists(addonName: string, _songs: File[]) {
   link.remove()
 
   showToast({
+    id: crypto.randomUUID(),
     title: 'Downloading...',
-    description: ref(() => <>Your addon is gonna be downloaded soon. Have a great day in the Zone, Stalker 🤟</>),
+    description: <>Your addon is gonna be downloaded soon. Have a great day in the Zone, Stalker 🤟</>,
     type: 'success',
   })
 }

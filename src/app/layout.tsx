@@ -5,6 +5,8 @@ import { classes } from '@/utils'
 import { fonts } from '@/assets/fonts'
 import background from '@/assets/bg.jpg'
 import Toasts from '@/components/toast'
+import dynamic from 'next/dynamic'
+import React, { ReactNode } from 'react'
 
 export const metadata: Metadata = {
   title: project.name,
