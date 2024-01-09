@@ -37,8 +37,14 @@ code {
     @apply bg-zinc-600 rounded-full;
   }
 }
-:not(.popover-content, .dropdown-content) {
+input,
+textarea,
+button,
+a {
   @apply outline outline-0 focus-visible:outline-2 outline-orange-400 focus-visible:duration-100;
+}
+code {
+  @apply font-[unset];
 }
 [data-radix-popper-content-wrapper] > * {
   &[data-side="top"] {

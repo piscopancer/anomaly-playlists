@@ -1,48 +1,37 @@
 'use client'
 
-import { store, useStoreSnapshot } from '@/store'
-import React, { useEffect, useRef, useState } from 'react'
-import DropSongsArea from './(private)/drop-songs-area'
-import { Song } from './(private)/song'
-import { downloadPlaylists, filterOutSongs, getallowedExtensions } from './(private)'
 import anomaly from '@/assets/anomaly.png'
 import background from '@/assets/bg.jpg'
-import Image from 'next/image'
-import { classes } from '@/utils'
 import { fonts } from '@/assets/fonts'
-import { TbBrandGithub, TbDownload, TbDragDrop, TbMusic, TbMusicPlus, TbPlaylist } from 'react-icons/tb'
-import { ref } from 'valtio'
-import { project } from '@/project'
-import { AnimatePresence, motion } from 'framer-motion'
 import { Tooltip } from '@/components/tooltip'
 import { loadFfmpeg } from '@/ffmpeg'
-import SongsBuffer from './(private)/songs-buffer'
+import { project } from '@/project'
 import { getSongsAsFiles } from '@/song'
+import { store, useStoreSnapshot } from '@/store'
+import { classes } from '@/utils'
+import { AnimatePresence, motion } from 'framer-motion'
+import Image from 'next/image'
+import React, { useEffect, useRef, useState } from 'react'
+import { TbBrandGithub, TbDownload, TbDragDrop, TbMusic, TbMusicPlus, TbPlaylist } from 'react-icons/tb'
+import { downloadPlaylists, inputAcceptedFormats, onSongsInput } from './(private)'
+import DropSongsArea from './(private)/drop-songs-area'
+import { Song } from './(private)/song'
+import SongsBuffer from './(private)/songs-buffer'
 
 export default function HomePage() {
   const snap = useStoreSnapshot()
-  const totalSizeMb = (snap.songs.map((s) => s.size).reduce((prev, next) => prev + next, 0) / 1024 ** 2).toFixed(1)
+  const readySongs = snap.songs.filter((s) => !s.converting)
+  const totalSizeMb = (readySongs.map((s) => s.size).reduce((prev, next) => prev + next, 0) / 1024 ** 2).toFixed(1)
   const addonNameInput = useRef<HTMLInputElement>(null!)
   const [addonName, setAddonName] = useState('')
+  const areSongsPresent = !!readySongs.length
 
   useEffect(() => {
     loadFfmpeg()
   }, [])
 
-  function onSongsAddInput(e: React.ChangeEvent<HTMLInputElement>) {
-    const newSongs = filterOutSongs(Array.from(e.target.files!))
-    e.target.files = new DataTransfer().files
-    const allSongs = [...getSongsAsFiles(), ...newSongs]
-    const allSongsBuffer = new DataTransfer()
-    allSongs.forEach((f) => allSongsBuffer.items.add(f))
-    store.songsBufferInput.files = allSongsBuffer.files
-    store.songs = allSongs.map((f) => ({
-      name: f.name,
-      size: f.size,
-    }))
-  }
-
   function onDownloadClick() {
+    console.log(store.songsBufferInput.files)
     downloadPlaylists(addonName, getSongsAsFiles())
   }
 
@@ -72,7 +61,7 @@ export default function HomePage() {
           {project.name} <span className='text-zinc-400'>(beta)</span>
         </h1>
         <h2 className='text-center text-zinc-400 text-sm mb-6'>
-          Upload your <code className={classes(fonts.roboto, 'text-orange-400')}>{getallowedExtensions().join('/')}</code> tracks to create a PDA music addon
+          Upload your <code className={classes(fonts.roboto, 'text-orange-400')}>ogg/mp3</code> tracks to create a PDA music addon
         </h2>
         <fieldset className='flex mb-6 items-center max-md:block'>
           <label htmlFor='addon-name' className='text-zinc-200 block max-md:mb-1 max-md:text-sm'>
@@ -98,26 +87,26 @@ export default function HomePage() {
         <ul className='flex items-center justify-end mb-6'>
           <div className='flex items-center gap-2 mr-8'>
             <TbPlaylist className='stroke-zinc-400' />
-            <p className='text-sm text-zinc-200'>{snap.songs.length}</p>
+            <output className='text-sm text-zinc-200'>{readySongs.length}</output>
           </div>
-          <p className='text-zinc-200 text-sm mr-8'>
+          <output className='text-zinc-200 text-sm mr-8'>
             {totalSizeMb} <span className='text-zinc-400'>Mb</span>
-          </p>
+          </output>
           <li className='text-zinc-200 bg-zinc-800 rounded-md py-2 px-4 relative flex items-center gap-3 group border-2 border-transparent hover:border-zinc-700 duration-200 ease-out'>
             <div className='absolute top-[-2px] inset-x-2 h-[2px] bg-gradient-to-r from-transparent via-zinc-700 to-transparent' />
             <div className='absolute bottom-[-2px] inset-x-2 h-[2px] bg-gradient-to-r from-transparent via-zinc-700 to-transparent' />
-            <input title='' multiple type='file' onChange={onSongsAddInput} accept='audio/ogg' className='absolute inset-0 opacity-0' />
+            <input title='' multiple type='file' onChange={onSongsInput} accept={inputAcceptedFormats} className='absolute inset-0 opacity-0' />
             <TbMusicPlus />
             Import songs
           </li>
           <Tooltip
-            hidden={!!addonName && !!snap.songs.length}
+            hidden={!!addonName && areSongsPresent}
             content={
               <ul className='list-disc list-inside marker:text-zinc-600'>
                 <li hidden={!!addonName}>
                   Give yor addon a <span className='text-orange-400'>name</span> first
                 </li>
-                <li hidden={!!snap.songs.length}>
+                <li hidden={!!areSongsPresent}>
                   Add at least <span className='text-orange-400'>1</span> song
                 </li>
               </ul>
@@ -128,7 +117,7 @@ export default function HomePage() {
                 if (!addonName) addonNameInput.current.focus()
               }}
               onClick={onDownloadClick}
-              disabled={snap.songs.length === 0 || !addonName}
+              disabled={!areSongsPresent || !addonName}
               className='text-zinc-900 ml-4 rounded-md h-10 disabled:!bg-black/20 disabled:text-zinc-600 enabled:bg-orange-400 hover:enabled:brightness-125 enabled:shadow-xl enabled:shadow-orange-400/30 group p-2.5 duration-200'
             >
               <TbDownload className='h-full group-hover:scale-110 duration-200 ease-out' />

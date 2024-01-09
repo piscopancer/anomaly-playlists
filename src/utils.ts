@@ -31,3 +31,7 @@ export function assignObject<T extends {} | undefined>(obj: T, newObj: T) {
 export type TRedefineObject<T, P extends Partial<Record<keyof T, unknown>>> = {
   [K in keyof T]: K extends keyof P ? P[K] : T[K]
 }
+
+export function deleteExtension(string: string) {
+  return string.replace(/(\.[^.]*)$/, '')
+}

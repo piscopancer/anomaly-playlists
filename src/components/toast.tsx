@@ -1,6 +1,6 @@
 'use client'
 
-import { FfmpegLoadingToast } from '@/ffmpeg'
+import { FfmpegConvertingToast, FfmpegLoadingToast } from '@/ffmpeg'
 import { useStoreSnapshot } from '@/store'
 import { TRedefineObject } from '@/utils'
 import * as RToast from '@radix-ui/react-toast'
@@ -37,6 +37,7 @@ export default function Toasts() {
           <Toast key={toast.id} toast={toast} />
         ))}
         {storeSnap.ffmpeg.state !== 'ready' && <FfmpegLoadingToast />}
+        {storeSnap.songs.some((s) => s.converting) && <FfmpegConvertingToast />}
       </AnimatePresence>
       <RToast.Viewport className='fixed inset-0 z-[1000] pointer-events-none flex items-end justify-start p-4 flex-col-reverse gap-2' />
     </RToast.Provider>
