@@ -1,12 +1,13 @@
-import { TSong, formatSongName, getSongsAsFiles } from '@/song'
-import { store } from '@/store'
-import { useSnapshot } from 'valtio'
-import { TbRadioactive, TbRotate, TbX } from 'react-icons/tb'
-import { forwardRef, useEffect, useRef } from 'react'
-import { AnimatePresence, AnimationDefinition, animate, motion, useAnimate, useAnimation } from 'framer-motion'
-import { classes } from '@/utils'
 import { fonts } from '@/assets/fonts'
 import { Tooltip } from '@/components/tooltip'
+import useKey from '@/hooks/use-key'
+import { TSong, formatSongName, getSongsAsFiles } from '@/song'
+import { store } from '@/store'
+import { classes } from '@/utils'
+import { motion, useAnimation } from 'framer-motion'
+import { forwardRef, useEffect, useRef } from 'react'
+import { TbRadioactive, TbRotate, TbX } from 'react-icons/tb'
+import { useSnapshot } from 'valtio'
 
 export const Song = forwardRef<HTMLDivElement, { index: number; song: TSong }>((props, ref) => {
   const songSnap = useSnapshot(props.song)
@@ -60,7 +61,7 @@ export const Song = forwardRef<HTMLDivElement, { index: number; song: TSong }>((
             <Tooltip
               content={
                 <p className='text-zinc-200 text-sm'>
-                  converting file to <code className={classes(fonts.roboto, 'text-orange-400')}>ogg</code>...
+                  [{props.song.converting.progress * 100}%] converting file to <code className={classes(fonts.roboto, 'text-orange-400')}>ogg</code>...
                 </p>
               }
             >

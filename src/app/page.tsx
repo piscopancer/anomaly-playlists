@@ -4,7 +4,6 @@ import anomaly from '@/assets/anomaly.png'
 import background from '@/assets/bg.jpg'
 import { fonts } from '@/assets/fonts'
 import { Tooltip } from '@/components/tooltip'
-import { loadFfmpeg } from '@/ffmpeg'
 import { project } from '@/project'
 import { getSongsAsFiles } from '@/song'
 import { store, useStoreSnapshot } from '@/store'
@@ -25,10 +24,6 @@ export default function HomePage() {
   const addonNameInput = useRef<HTMLInputElement>(null!)
   const [addonName, setAddonName] = useState('')
   const areSongsPresent = !!readySongs.length
-
-  useEffect(() => {
-    loadFfmpeg()
-  }, [])
 
   function onDownloadClick() {
     console.log(store.songsBufferInput.files)
@@ -79,9 +74,9 @@ export default function HomePage() {
               onChange={(e) => {
                 setAddonName(e.target.value)
               }}
-              className={classes(fonts.roboto, 'grow bg-black/30 text-zinc-200 placeholder:text-zinc-500 py-1 pl-[1ch] pr-[7ch] rounded-md hover:placeholder:text-zinc-700 focus:placeholder:text-zinc-700')}
+              className={classes('grow bg-black/30 text-zinc-200 placeholder:text-zinc-500 py-1 pl-2 pr-14 rounded-md hover:placeholder:text-zinc-700 focus:placeholder:text-zinc-700')}
             />
-            <p className={classes(fonts.roboto, 'rounded-r-md px-[1ch] text-zinc-500 bg-black/20 py-1 absolute right-0')}>.zip</p>
+            <p className={classes('rounded-r-md px-[1ch] text-zinc-500 bg-black/20 py-1 absolute right-0')}>.zip</p>
           </div>
         </fieldset>
         <ul className='flex items-center justify-end mb-6'>

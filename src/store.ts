@@ -7,11 +7,6 @@ import { FFmpeg } from '@ffmpeg/ffmpeg'
 
 const defaultStore = {
   songsBufferInput: null! as ReturnType<typeof ref<HTMLInputElement>>,
-  ffmpeg: { state: 'not-ready' } as
-    | {
-        state: 'not-ready' | 'loading'
-      }
-    | { state: 'ready'; self: FFmpeg },
   songs: [] as TSong[],
 }
 

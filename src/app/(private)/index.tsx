@@ -22,7 +22,7 @@ export function onSongsInput(e: React.ChangeEvent<HTMLInputElement>) {
   e.stopPropagation()
   const files = [...e.target.files!]
   e.target.files = new DataTransfer().files
-  const newSongs = filterOutSongs(store.ffmpeg.state === 'ready' ? files : files.filter((f) => (f.type as TAcceptedFormat) === 'audio/ogg'))
+  const newSongs = filterOutSongs(files)
   store.songs = store.songs.concat(
     newSongs.map((f) => ({
       name: deleteExtension(f.name),
@@ -35,18 +35,8 @@ export function onSongsInput(e: React.ChangeEvent<HTMLInputElement>) {
     .concat(newSongs)
     .forEach((f) => allSongsBuffer.items.add(f))
   store.songsBufferInput.files = allSongsBuffer.files
-
-  if (store.ffmpeg.state === 'ready') {
-    const newSongsNotOggs = newSongs.filter((f) => (f.type as TAcceptedFormat) !== 'audio/ogg')
-    convertSongsToOggs(store.ffmpeg.self, newSongsNotOggs)
-  } else {
-    showToast({
-      id: crypto.randomUUID(),
-      type: 'warning',
-      title: 'Be patient',
-      description: 'Converter is not ready yet',
-    })
-  }
+  const newSongsNotOggs = newSongs.filter((f) => (f.type as TAcceptedFormat) !== 'audio/ogg')
+  convertSongsToOggs(newSongsNotOggs)
 }
 
 export async function downloadPlaylists(addonName: string, _songs: File[]) {
