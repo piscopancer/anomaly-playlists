@@ -17,7 +17,7 @@ export const Song = forwardRef<HTMLDivElement, { index: number; song: TSong }>((
   useEffect(() => {
     selfAnim.set({ translateY: -5, opacity: 0 })
     selfAnim.start({ translateY: 0, opacity: 1, transition: { duration: 0.1, layout: { duration: 0.1 } } })
-  }, [])
+  }, [selfAnim])
 
   function changeName(e: React.ChangeEvent<HTMLInputElement>) {
     props.song.changedName = e.target.value === songSnap.name ? undefined : e.target.value

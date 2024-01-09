@@ -47,7 +47,7 @@ export const Toast = forwardRef<HTMLDivElement, { toast: TToast }>(({ toast }, r
   useEffect(() => {
     selfAnim.set({ opacity: 0, x: '-10%' })
     selfAnim.start({ opacity: 1, x: 0 })
-  }, [])
+  }, [selfAnim])
 
   function Icon({ type }: { type: TToast['type'] }) {
     const IconForType: IconType = (
@@ -79,6 +79,8 @@ export const Toast = forwardRef<HTMLDivElement, { toast: TToast }>(({ toast }, r
     </RToast.Root>
   )
 })
+
+Toast.displayName = 'Toast'
 
 function FfmpegConvertingToast() {
   const storeSnap = useStoreSnapshot()
