@@ -27,7 +27,7 @@ export async function convertSongsToOggs(newSongs: File[]) {
           songToReplace.converting.progress = progress
         }
       })
-      const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd'
+      const baseURL = 'https://unpkg.com/browse/@ffmpeg/core@0.12.6/dist/umd'
       await ffmpeg.load({
         coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
         wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
