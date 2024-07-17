@@ -1,8 +1,7 @@
 import { fonts } from '@/assets/fonts'
+import { TSong, formatSongName, getSongsAsFiles } from '@/components/song'
+import { store } from '@/components/store'
 import { Tooltip } from '@/components/tooltip'
-import useKey from '@/hooks/use-key'
-import { TSong, formatSongName, getSongsAsFiles } from '@/song'
-import { store } from '@/store'
 import { classes } from '@/utils'
 import { motion, useAnimation } from 'framer-motion'
 import { forwardRef, useEffect, useRef } from 'react'
@@ -41,7 +40,7 @@ export const Song = forwardRef<HTMLDivElement, { index: number; song: TSong }>((
       layout={'position'}
       animate={selfAnim}
       exit={{ translateY: -5, opacity: 0, transition: { duration: 0.1 } }}
-      className={classes(props.song.converting ? 'outline-orange-400/50 outline-2 from-orange-400/10 h-16' : 'from-zinc-800/20', 'p-2 flex gap-2 rounded-md bg-gradient-to-r to-zinc-800/50 outline outline-0 relative')}
+      className={classes(props.song.converting ? 'outline-orange-400/50 outline-2 from-orange-400/10 h-16' : 'from-zinc-800/30', 'p-2 flex gap-2 rounded-md bg-gradient-to-r to-zinc-800/50 border border-zinc-700 outline outline-0 relative')}
     >
       <output className='text-zinc-400 mt-0.5 text-xs h-5 w-5 rounded-full flex justify-center items-center bg-zinc-800 self-start shrink-0'>{props.index + 1}</output>
       <div className='grid grid-cols-[1fr_auto_auto] grid-rows-2 gap-x-4 items-center w-full'>

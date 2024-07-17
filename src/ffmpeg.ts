@@ -2,18 +2,20 @@
 
 import { FFmpeg } from '@ffmpeg/ffmpeg'
 import { fetchFile, toBlobURL } from '@ffmpeg/util'
-import { getSongsAsFiles } from './song'
-import { store, useStoreSnapshot } from './store'
-import { TAcceptedFormat } from './app/(private)'
+import { AcceptedFormat } from './app/()'
+import { getSongsAsFiles } from './components/song'
+import { store } from './components/store'
 
 async function convertSongFileToOgg(ffmpeg: FFmpeg, song: File) {
   const key = song.size
-  const iName = key + '.mp3'
+  const extension = song.name.split('.').pop()
+  if (!extension) return
+  const iName = key + extension
   const oName = key + '.ogg'
   await ffmpeg.writeFile(iName, await fetchFile(song))
   await ffmpeg.exec(['-i', iName, oName])
   const o = (await ffmpeg.readFile(oName)) as Uint8Array
-  return new File([o.buffer], song.name, { type: 'audio/ogg' satisfies TAcceptedFormat })
+  return new File([o.buffer], song.name, { type: 'audio/ogg' satisfies AcceptedFormat })
 }
 
 export async function convertSongsToOggs(newSongs: File[]) {
@@ -27,7 +29,7 @@ export async function convertSongsToOggs(newSongs: File[]) {
           songToReplace.converting.progress = progress
         }
       })
-      const baseURL = 'https://unpkg.com/browse/@ffmpeg/core@0.12.6/dist/umd'
+      const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd'
       await ffmpeg.load({
         coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
         wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
@@ -42,6 +44,7 @@ export async function convertSongsToOggs(newSongs: File[]) {
         ffmpeg.terminate()
         return
       }
+      if (!ogg) return
       songToReplace.converting = undefined
       const buffer = new DataTransfer()
       getSongsAsFiles().forEach((f) => buffer.items.add(f.size === songToReplace.size ? ogg : f))

@@ -1,9 +1,8 @@
 'use client'
 
+import { proxy, ref, useSnapshot } from 'valtio'
 import { devtools } from 'valtio/utils'
 import { TSong } from './song'
-import { proxy, ref, useSnapshot } from 'valtio'
-import { FFmpeg } from '@ffmpeg/ffmpeg'
 
 const defaultStore = {
   songsBufferInput: null! as ReturnType<typeof ref<HTMLInputElement>>,

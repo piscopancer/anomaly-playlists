@@ -1,10 +1,10 @@
 'use client'
 
-import { useStoreSnapshot } from '@/store'
+import { useStoreSnapshot } from '@/components/store'
 import { TRedefineObject } from '@/utils'
 import * as RToast from '@radix-ui/react-toast'
 import { AnimatePresence, motion, useAnimation } from 'framer-motion'
-import { Fragment, ReactNode, forwardRef, useEffect, useMemo, useState } from 'react'
+import { ReactNode, forwardRef, useEffect } from 'react'
 import { IconType } from 'react-icons'
 import { TbAlertHexagon, TbCircleCheck } from 'react-icons/tb'
 import { proxy, ref, useSnapshot } from 'valtio'
@@ -67,11 +67,11 @@ export const Toast = forwardRef<HTMLDivElement, { toast: TToast }>(({ toast }, r
       onOpenChange={(open) => {
         !open && (toastsStore.toasts = toastsStore.toasts.filter((t) => t.id !== toast.id))
       }}
-      className='relative border-2 border-zinc-800 rounded-md bg-zinc-900 px-4 py-2 max-w-[64ch] grid grid-cols-[auto_1fr] grid-rows-[auto_auto]'
+      className='relative border border-zinc-800 rounded-md bg-zinc-900 px-4 py-2 max-w-[64ch] grid grid-cols-[auto_1fr] grid-rows-[auto_auto]'
     >
       <motion.div layout='position' ref={ref} animate={selfAnim} exit={{ opacity: 0, x: '100%' }}>
-        <div className='absolute top-[-2px] inset-x-2 h-[2px] bg-gradient-to-r from-transparent via-zinc-600 to-transparent' />
-        <div className='absolute bottom-[-2px] inset-x-2 h-[2px] bg-gradient-to-r from-transparent via-zinc-600 to-transparent' />
+        <div className='absolute -top-px inset-x-2 h-px bg-gradient-to-r from-transparent via-zinc-600 to-transparent' />
+        <div className='absolute -bottom-px inset-x-2 h-px bg-gradient-to-r from-transparent via-zinc-600 to-transparent' />
         <Icon type={toast.type} />
         <RToast.Title className='text-zinc-400 text-sm mb-1'>{toast.title}</RToast.Title>
         <RToast.Description className='text-zinc-200 text-sm'>{toast.description()}</RToast.Description>

@@ -1,7 +1,7 @@
+import { filterOutSongs, formatSongName, getSongsAsFiles } from '@/components/song'
+import { store } from '@/components/store'
 import { showToast } from '@/components/toast'
 import { convertSongsToOggs } from '@/ffmpeg'
-import { filterOutSongs, formatSongName, getSongsAsFiles } from '@/song'
-import { store } from '@/store'
 import { deleteExtension } from '@/utils'
 import { downloadZip } from 'client-zip'
 
@@ -11,9 +11,9 @@ const configText = `
 `
 export const acceptedFormats = ['audio/ogg', 'audio/mpeg'] as const
 export const inputAcceptedFormats = acceptedFormats.join(',')
-export type TAcceptedFormat = (typeof acceptedFormats)[number]
+export type AcceptedFormat = (typeof acceptedFormats)[number]
 
-export function getallowedExtensions() {
+export function allowedExtensions() {
   return acceptedFormats.map((f) => f.replace('audio/', ''))
 }
 
@@ -35,7 +35,7 @@ export function onSongsInput(e: React.ChangeEvent<HTMLInputElement>) {
     .concat(newSongs)
     .forEach((f) => allSongsBuffer.items.add(f))
   store.songsBufferInput.files = allSongsBuffer.files
-  const newSongsNotOggs = newSongs.filter((f) => (f.type as TAcceptedFormat) !== 'audio/ogg')
+  const newSongsNotOggs = newSongs.filter((f) => (f.type as AcceptedFormat) !== 'audio/ogg')
   convertSongsToOggs(newSongsNotOggs)
 }
 

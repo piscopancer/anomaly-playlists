@@ -1,12 +1,11 @@
-import { project } from '@/project'
-import type { Metadata } from 'next'
-import '@/assets/styles/style.scss'
-import { classes } from '@/utils'
+import bg from '@/assets/bg'
 import { fonts } from '@/assets/fonts'
-import background from '@/assets/bg.jpg'
+import '@/assets/styles/style.scss'
 import Toasts from '@/components/toast'
-import dynamic from 'next/dynamic'
-import React, { ReactNode } from 'react'
+import { project } from '@/project'
+import { classes } from '@/utils'
+import type { Metadata } from 'next'
+import React from 'react'
 
 export const metadata: Metadata = {
   title: project.name,
@@ -14,7 +13,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: project.name,
     description: project.description,
-    images: [background.src],
+    images: [bg],
     authors: [project.creator.nickname],
   },
 }

@@ -1,8 +1,8 @@
-import { acceptedFormats, getallowedExtensions } from './app/(private)'
-import { fonts } from './assets/fonts'
-import { showToast } from './components/toast'
+import { acceptedFormats, allowedExtensions } from '../app/()'
+import { fonts } from '../assets/fonts'
+import { classes } from '../utils'
 import { store } from './store'
-import { classes } from './utils'
+import { showToast } from './toast'
 
 export type TSong = {
   name: string
@@ -28,7 +28,7 @@ export function filterOutSongs(files: File[]) {
         title: 'Wrong file format',
         description: (
           <>
-            File <span className='text-white'>{f.name.length > maxFileLength ? `${f.name.slice(0, maxFileLength)}...` : f.name}</span> must have <code className={classes(fonts.roboto, 'text-orange-400')}>{getallowedExtensions().join('/')}</code> format!
+            File <span className='text-white'>{f.name.length > maxFileLength ? `${f.name.slice(0, maxFileLength)}...` : f.name}</span> must have <code className={classes(fonts.roboto, 'text-orange-400')}>{allowedExtensions().join('/')}</code> format!
           </>
         ),
         type: 'warning',

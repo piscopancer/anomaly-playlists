@@ -1,4 +1,4 @@
-import { store } from '@/store'
+import { store } from '@/components/store'
 import { useEffect, useRef } from 'react'
 import { ref } from 'valtio'
 

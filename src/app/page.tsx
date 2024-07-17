@@ -1,21 +1,21 @@
 'use client'
 
-import anomaly from '@/assets/anomaly.png'
-import background from '@/assets/bg.jpg'
+import anomaly from '@/assets/anomaly'
+import bg from '@/assets/bg'
 import { fonts } from '@/assets/fonts'
+import { getSongsAsFiles } from '@/components/song'
+import { store, useStoreSnapshot } from '@/components/store'
 import { Tooltip } from '@/components/tooltip'
 import { project } from '@/project'
-import { getSongsAsFiles } from '@/song'
-import { store, useStoreSnapshot } from '@/store'
 import { classes } from '@/utils'
 import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
-import React, { useEffect, useRef, useState } from 'react'
-import { TbBrandGithub, TbDownload, TbDragDrop, TbMusic, TbMusicPlus, TbPlaylist } from 'react-icons/tb'
-import { downloadPlaylists, inputAcceptedFormats, onSongsInput } from './(private)'
-import DropSongsArea from './(private)/drop-songs-area'
-import { Song } from './(private)/song'
-import SongsBuffer from './(private)/songs-buffer'
+import { useRef, useState } from 'react'
+import { TbBrandGithub, TbDownload, TbDragDrop, TbExclamationCircle, TbMusic, TbMusicPlus, TbPlaylist } from 'react-icons/tb'
+import { downloadPlaylists, inputAcceptedFormats, onSongsInput } from './()'
+import DropSongsArea from './()/drop-songs-area'
+import { Song } from './()/song'
+import SongsBuffer from './()/songs-buffer'
 
 export default function HomePage() {
   const snap = useStoreSnapshot()
@@ -35,7 +35,7 @@ export default function HomePage() {
       <SongsBuffer />
       <DropSongsArea />
       <section className='fixed inset-0'>
-        <Image alt='background' priority src={background} className='object-center h-full w-full object-cover' />
+        <Image data-credit='https://www.moddb.com/mods/stalker-anomaly/addons/rays-of-anomalous-worlds-weathers-reshade' alt='background' fill quality={75} priority src={bg} className='object-center h-full w-full object-cover brightness-75' />
         <div className='absolute inset-0 h-full opacity-80 [background:radial-gradient(transparent,theme(colors.zinc.950))]' />
         <div className='absolute inset-0 h-full bg-gradient-to-b from-transparent via-zinc-950 via-70% to-zinc-950 opacity-80' />
       </section>
@@ -51,7 +51,7 @@ export default function HomePage() {
         </a>
       </Tooltip>
       <section className='relative'>
-        <Image alt='anomaly' src={anomaly} className='h-24 w-auto mx-auto mb-6' />
+        <Image width={128} height={128} alt='anomaly' src={anomaly} className='h-24 w-auto mx-auto mb-6' />
         <h1 className='text-center mb-1 text-xl text-zinc-200 font-light'>
           {project.name} <span className='text-zinc-400'>(beta)</span>
         </h1>
@@ -70,13 +70,13 @@ export default function HomePage() {
               ref={addonNameInput}
               value={addonName}
               spellCheck={false}
-              placeholder='my-songs-addon'
+              placeholder='my_songs_addon'
               onChange={(e) => {
                 setAddonName(e.target.value)
               }}
-              className={classes('grow bg-black/30 text-zinc-200 placeholder:text-zinc-500 py-1 pl-2 pr-14 rounded-md hover:placeholder:text-zinc-700 focus:placeholder:text-zinc-700')}
+              className={classes('grow bg-black/30 border border-zinc-700 text-zinc-200 placeholder:text-zinc-500 px-4 pr-14 rounded-md hover:placeholder:text-zinc-700 focus:placeholder:text-zinc-700 py-1.5')}
             />
-            <p className={classes('rounded-r-md px-[1ch] text-zinc-500 bg-black/20 py-1 absolute right-0')}>.zip</p>
+            <p className={classes('rounded-r-md px-3 text-zinc-500 bg-black/20 py-1.5 absolute right-0')}>.zip</p>
           </div>
         </fieldset>
         <ul className='flex items-center justify-end mb-6'>
@@ -87,9 +87,9 @@ export default function HomePage() {
           <output className='text-zinc-200 text-sm mr-8'>
             {totalSizeMb} <span className='text-zinc-400'>Mb</span>
           </output>
-          <li className='text-zinc-200 bg-zinc-800 rounded-md py-2 px-4 relative flex items-center gap-3 group border-2 border-transparent hover:border-zinc-700 duration-200 ease-out'>
-            <div className='absolute top-[-2px] inset-x-2 h-[2px] bg-gradient-to-r from-transparent via-zinc-700 to-transparent' />
-            <div className='absolute bottom-[-2px] inset-x-2 h-[2px] bg-gradient-to-r from-transparent via-zinc-700 to-transparent' />
+          <li className='text-zinc-200 bg-zinc-700/50 rounded-md py-2 px-4 relative flex items-center gap-3 group border border-transparent hover:border-zinc-700 duration-200 ease-out'>
+            <div className='absolute -top-px inset-x-2 h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent' />
+            <div className='absolute -bottom-px inset-x-2 h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent' />
             <input title='' multiple type='file' onChange={onSongsInput} accept={inputAcceptedFormats} className='absolute inset-0 opacity-0' />
             <TbMusicPlus />
             Import songs
@@ -99,7 +99,7 @@ export default function HomePage() {
             content={
               <ul className='list-disc list-inside marker:text-zinc-600'>
                 <li hidden={!!addonName}>
-                  Give yor addon a <span className='text-orange-400'>name</span> first
+                  Give your addon a <span className='text-orange-400'>name</span> first
                 </li>
                 <li hidden={!!areSongsPresent}>
                   Add at least <span className='text-orange-400'>1</span> song
@@ -128,12 +128,12 @@ export default function HomePage() {
             </AnimatePresence>
           </ul>
         ) : (
-          <motion.div initial={{ opacity: 0, translateY: 5 }} animate={{ opacity: 1, translateY: 0 }} className='py-12 bg-black/20 rounded-md'>
+          <motion.div initial={{ opacity: 0, translateY: 5 }} animate={{ opacity: 1, translateY: 0 }} className='py-12 bg-black/30 rounded-md'>
             <p className='text-zinc-400 text-center'>
               <TbMusic className='inline-block -translate-y-0.5' /> Songs will appear here
             </p>
-            <div className='w-56 h-[2px] bg-gradient-to-r from-transparent via-zinc-700 to-transparent mx-auto my-4' />
-            <p className='text-center text-zinc-400'>
+            <div className='w-56 h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent mx-auto my-4' />
+            <p className='text-center text-zinc-400 mb-8'>
               You can{' '}
               <span className='text-zinc-200 inline-block'>
                 <TbDragDrop className='inline-block mr-1 -translate-y-0.5' />
@@ -141,6 +141,11 @@ export default function HomePage() {
               </span>{' '}
               files onto the page btw ngl
             </p>
+            <div className='text-zinc-500 text-center text-sm border relative w-fit mx-auto px-8 py-4 rounded-lg border-zinc-600'>
+              <TbExclamationCircle className='size-8 p-1 absolute top-0 -translate-y-1/2 bg-black  left-1/2 -translate-x-1/2' />
+              <p className='mb-1 mt-1'>Some songs cannot be converted due to an ffmpeg issue</p>
+              <p className=''>If your convertion did not start automatically, converter may be still downloading</p>
+            </div>
           </motion.div>
         )}
       </section>
