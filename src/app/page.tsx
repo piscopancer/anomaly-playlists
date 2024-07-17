@@ -51,7 +51,7 @@ export default function HomePage() {
         </a>
       </Tooltip>
       <section className='relative'>
-        <Image width={128} height={128} alt='anomaly' src={anomaly} className='h-24 w-auto mx-auto mb-6' />
+        <Image width={256} height={256} alt='anomaly' src={anomaly} className='h-24 w-auto mx-auto mb-6' />
         <h1 className='text-center mb-1 text-xl text-zinc-200 font-light'>
           {project.name} <span className='text-zinc-400'>(beta)</span>
         </h1>
@@ -90,7 +90,7 @@ export default function HomePage() {
           <li className='text-zinc-200 bg-zinc-700/50 rounded-md py-2 px-4 relative flex items-center gap-3 group border border-transparent hover:border-zinc-700 duration-200 ease-out'>
             <div className='absolute -top-px inset-x-2 h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent' />
             <div className='absolute -bottom-px inset-x-2 h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent' />
-            <input title='' multiple type='file' onChange={onSongsInput} accept={inputAcceptedFormats} className='absolute inset-0 opacity-0' />
+            <input multiple type='file' onChange={onSongsInput} accept={inputAcceptedFormats} className='absolute inset-0 opacity-0' />
             <TbMusicPlus />
             Import songs
           </li>
@@ -141,8 +141,8 @@ export default function HomePage() {
               </span>{' '}
               files onto the page btw ngl
             </p>
-            <div className='text-zinc-500 text-center text-sm border relative w-fit mx-auto px-8 py-4 rounded-lg border-zinc-600'>
-              <TbExclamationCircle className='size-8 p-1 absolute top-0 -translate-y-1/2 bg-black  left-1/2 -translate-x-1/2' />
+            <div className='text-zinc-500 text-center text-sm border relative w-fit mx-auto px-8 py-4 rounded-lg border-zinc-700'>
+              <TbExclamationCircle className='size-8 p-1 absolute top-0 rounded-full -translate-y-1/2 bg-black  left-1/2 -translate-x-1/2' />
               <p className='mb-1 mt-1'>Some songs cannot be converted due to an ffmpeg issue</p>
               <p className=''>If your convertion did not start automatically, converter may be still downloading</p>
             </div>
