@@ -144,7 +144,7 @@ export default function HomePage() {
             <div className='text-zinc-500 text-center text-sm border relative w-fit mx-auto px-8 py-4 rounded-lg border-zinc-700'>
               <TbExclamationCircle className='size-8 p-1 absolute top-0 rounded-full -translate-y-1/2 bg-black  left-1/2 -translate-x-1/2' />
               <p className='mb-1 mt-1'>Some songs cannot be converted due to an ffmpeg issue</p>
-              <p className=''>If your convertion did not start automatically, converter may be still downloading</p>
+              <p className=''>If your conversion did not start automatically, converter may be still downloading</p>
             </div>
           </motion.div>
         )}
