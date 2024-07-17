@@ -1,4 +1,3 @@
-import { fonts } from '@/assets/fonts'
 import { TSong, formatSongName, getSongsAsFiles } from '@/components/song'
 import { store } from '@/components/store'
 import { Tooltip } from '@/components/tooltip'
@@ -60,7 +59,7 @@ export const Song = forwardRef<HTMLDivElement, { index: number; song: TSong }>((
             <Tooltip
               content={
                 <p className='text-zinc-200 text-sm'>
-                  [{props.song.converting.progress * 100}%] converting file to <code className={classes(fonts.roboto, 'text-orange-400')}>ogg</code>...
+                  [{props.song.converting.progress * 100}%] converting file to <code className='font-mono text-orange-400'>ogg</code>...
                 </p>
               }
             >

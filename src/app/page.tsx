@@ -2,7 +2,6 @@
 
 import anomaly from '@/assets/anomaly'
 import bg from '@/assets/bg'
-import { fonts } from '@/assets/fonts'
 import { getSongsAsFiles } from '@/components/song'
 import { store, useStoreSnapshot } from '@/components/store'
 import { Tooltip } from '@/components/tooltip'
@@ -56,7 +55,7 @@ export default function HomePage() {
           {project.name} <span className='text-zinc-400'>(beta)</span>
         </h1>
         <h2 className='text-center text-zinc-400 text-sm mb-6'>
-          Upload your <code className={classes(fonts.roboto, 'text-orange-400')}>ogg/mp3</code> tracks to create a PDA music addon
+          Upload your <code className={'text-orange-400 font-mono'}>ogg/mp3</code> tracks to create a PDA music addon
         </h2>
         <fieldset className='flex mb-6 items-center max-md:block'>
           <label htmlFor='addon-name' className='text-zinc-200 block max-md:mb-1 max-md:text-sm'>
@@ -66,7 +65,7 @@ export default function HomePage() {
             <input
               id='addon-name'
               type='text'
-              autoComplete='none'
+              autoComplete='off'
               ref={addonNameInput}
               value={addonName}
               spellCheck={false}
